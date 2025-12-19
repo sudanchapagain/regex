@@ -51,9 +51,10 @@ regex_exe = executable('regex', sources)
 
 test('basic match', regex_exe, args: ['test', 'test'])
 test('no match', regex_exe, args: ['test', 'best'], should_fail: true)
+test('wildcard', regex_exe, args: ['t.st', 'test'])
 
 if get_option('buildtype') == 'debug'
-  foreach test_name : ['basic match', 'no match']
+  foreach test_name : ['basic match', 'no match', 'wildcard']
     test(
       test_name + ' with timeout',
       regex_exe,
