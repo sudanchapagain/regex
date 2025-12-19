@@ -1,11 +1,19 @@
-regex parser.
-=============
+regex parser
+============
 
-Small, incomplete, un-optimized, messy, and non-standard implementation of regex. **this is my second time trying and
-it's messed up. giving up on this.**
+a simple toy regex parser.
 
 ```nu
-"Sudan Chapagain" | ./main "^S.+t$"
+./build/regex "^S.+t$" "Sudan Chapagain"
+```
+
+to build and run
+----------------
+
+```sh
+meson setup build --buildtype=release
+meson compile -C build
+./build/regex "pattern" "string"
 ```
 
 resources
