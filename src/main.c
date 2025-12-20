@@ -1,33 +1,61 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include "../include/regex.h"
 
 static bool
-match_character(char pattern_char, char text_char) {
-    if (pattern_char == '.') {
-        return true;  /* . matches anything */
+match_star(const char c, const char *pattern, const char *text) {
+    if (match_here(pattern, text)) { /* matching zero occurrences first */
+        return true;
     }
 
-    return pattern_char == text_char;
+    while (*text != '\0' && (c == '.' || c == *text)) { /* matching one or more occurrences */
+        text++;
+
+        if (match_here(pattern, text)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+static bool
+match_here(const char *pattern, const char *text) {
+    if (pattern[0] == '\0') {
+        return true; /* empty pattern means we've matched */
+    }
+
+    if (pattern[1] == '*') {
+        return match_star(pattern[0], pattern + 2, text);
+    }
+    
+    /* text is empty but pattern is not */
+    if (text[0] == '\0') {
+        return false;
+    }
+    
+    /* match single character or . */
+    if (pattern[0] == '.' || pattern[0] == text[0]) {
+        return match_here(pattern + 1, text + 1);
+    }
+    
+    return false;
 }
 
 static bool
 match_pattern(const char *pattern, const char *text) {
-    for (int i = 0; pattern[i] != '\0'; i++) { /* foreach char in pattern */
-        if (text[i] == '\0') { /* ran out of text but still have pattern left */
-            return false;
+    do {
+        if (match_here(pattern, text)) {
+            return true;
         }
+    } while (*text++ != '\0');
 
-        if (!match_character(pattern[i], text[i])) {
-            return false;
-        }
-    }
-
-    return true;
+    return false;
 }
 
 int
-main(int argc, char *argv[]) {
+main(const int argc, const char* const argv[]) {
     if (argc != 3) {
         printf("usage: %s <pattern> <string>\n", argv[0]);
         return 1;
