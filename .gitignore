@@ -3,3 +3,6 @@ build/
 
 # clangd uses this
 .cache/
+
+packagecache
+fmt-12.0.0
