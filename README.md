@@ -1,9 +1,8 @@
-regex parser
+# REGEX
 
-a simple toy regex parser.
+A basic and toy like regular expression parsing implementation.
 
-to build and run
-----------------
+### To Build and Run
 
 ```sh
 meson setup build --buildtype=release
